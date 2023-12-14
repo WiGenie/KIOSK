@@ -1,6 +1,13 @@
 package com.example.KIOSK
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.NumberFormatException
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 fun main() {
 
@@ -19,120 +26,221 @@ fun main() {
     val sidemn = Sidemn()
     val beveragemn = Beveragemn()
     println("맘스터치 키오스크입니다.")
-    while (true) {
+    try {
+        while (true) {
 
 
-        println("<[1]버거> <[2]치킨> <[3]사이드> <[4]음료> <[5]주문 및 계산하기> <[6]종료>")
-        try {
+            println("<[1]버거> <[2]치킨> <[3]사이드> <[4]음료> <[5]주문 및 계산하기> <[6]종료>")
             menubtn = readLine()!!.toInt()
             when (menubtn) {
-                1 -> {
-                    burgermn.makeBgOrderList()
-                }
-
-                2 -> {
-                    chickenmn.makeCkOrderList()
-                }
-                3 -> {
-                    sidemn.makeSdOrderList()
-                }
-                4 -> {
-                    beveragemn.makeBvOrderList()
-                }
+                1 -> burgermn.makeBgOrderList()
+                2 -> chickenmn.makeCkOrderList()
+                3 -> sidemn.makeSdOrderList()
+                4 -> beveragemn.makeBvOrderList()
                 5 -> {
-                    letOrder(burgermn,chickenmn,sidemn,beveragemn)
+                    val orderResult= letOrder(burgermn, chickenmn, sidemn, beveragemn)
+                    if (orderResult == "OrderComplete"){
+                        val random= Random
+                        val randomCustomer=random.nextInt(1, 4)
+                        var reverserandomCustomor=randomCustomer
+                        println("주문 대기열을 확인 중입니다...")
+                        for (i in 0 .. randomCustomer){
+                            if(reverserandomCustomor != 0){
+                                runBlocking {
+                                    launch {
+                                        delay(5000)
+                                        println("현재 주문 대기인원은 ${reverserandomCustomor}명 입니다.")
+                                    }
+                                }
+                                --reverserandomCustomor
+                            }
+                            else if (i == randomCustomer){
+                                println("고객님의 순서가 되었습니다! 매대 앞에서 잠시 기다려주세요.")
+                                return
+                            }
+                        }
+                    }
                 }
-
                 6 -> {
                     println("프로그램을 종료합니다.")
                     break
                 }
             }
-        } catch (e: java.lang.NumberFormatException) {
-            println("숫자로 입력해주세요.")
         }
-
+    } catch (e: java.lang.NumberFormatException) {
+        println("숫자로 입력해주세요.")
     }
 
 }
+
 //@supressLint:"SuspiciousIndentation" 이런식으로 나온거 걍 줄이나 띄우기 구분
-//하라는거니까 걍 ctrl+alt+L ㄱㄱ(비주얼 스튜디오의 ctrl alt f랑 같은 기능)
-fun letOrder(burgermn: Burgermn, chickenmn: Chickenmn,
-             sidemn: Sidemn, beveragemn: Beveragemn) {
+//하라는거니까 걍 ctrl+alt+L ㄱㄱ(비주얼 스튜디오의 ctrl shift f랑 같은 기능)
+fun letOrder(
+    burgermn: Burgermn, chickenmn: Chickenmn,
+    sidemn: Sidemn, beveragemn: Beveragemn
+):String {
 
+    var myMoney= 100000
 
+    //제공 방식을 먼저 물어보고 계산표 출력 및 계산하기
 
-     //제공 방식을 먼저 물어보고 계산표 출력 및 계산하기
-    var whereeat: Int = 0
     while (true) {
-//        println("<0.처음으로> <1.포장하기> <2.매장 내 식사>")
-//        whereeat = readLine()!!.toInt()
-//        when (whereeat) {
-//            0 -> {
-//                println("홈 화면으로 돌아갑니다 \n")
-//                break
-//            }
-//
-//            1 -> {
-//                println("포장을 선택하셨습니다.")
-//            }
-//
-//            2 -> {
-//                println("매장 내 식사를 선택하셨습니다.")
-//            }
-//
-//            else -> {
-//                println("숫자로 입력해주세요.")
-//                continue
-//            }
-//        }
+
 
         // 리스트들을 합칠 때 얘네들이 mutableListOf라고 해서
         // totallist도 변수 속성을 따라가는게 아님 (아마 Any같은걸로 지정될 듯)
         // 그래서 괄호로 각 메뉴 목록들을 묶고 toMutableList()로 변환해야 함
-        var totallist= (burgermn.bgorder + chickenmn.ckorder +
+        var totallist = (burgermn.bgorder + chickenmn.ckorder +
                 sidemn.sdorder + beveragemn.bvorder).toMutableList()
 
         var totalprice: Int = 0
-        var orderlist:Int=0
+        var orderlist: Int = 0
+
 
         for (i in totallist) {
-            println("${++orderlist}.${i.name}　${i.price}원　${i.count}개")
+            println("${++orderlist}.${i.name}${i.count}개 ${i.count * i.price}원　")
             totalprice += i.price * i.count
         }
         println("총 가격은 ${totalprice}원 입니다.\n")
         try {
-            println("<[1]포장/매장 여부 및 계산하기> <[2]메뉴 삭제하기>")
-            var lastOrder:Int= readLine()!!.toInt()
-            when(lastOrder) {
-                1 -> break //포장 매장 여부 물어보고 포장은 22시 매장은 21시에
-                // 마감하기로 하자, 메인 함수 최초 실행 때 얼마 있는지 정하고
-                // 요구하는 대기손님이랑 소지금이랑 이케저케 어쩌구저쩌구
-                2 -> {
-                    print("(0 입력시 돌아가기)주문 목록을 확인하시고 삭제할 메뉴의 번호를 입력해주세요:")
-                    var deleteMenu:Int= readLine()!!.toInt()
-                    if (deleteMenu == 0){
-                        println("<[5]주문 및 계산하기> 로 돌아갑니다.")
-                        continue
-                    }
-                    else if (deleteMenu in 1 ..  totallist.size){
-                        totallist.removeAt(deleteMenu-1)
-                        println("${deleteMenu}번 메뉴가 삭제되었습니다.")
-                        //작동은 되는데 이 작동 이후 다시
-                        //최종주문표를 가져오는 과정에서 bg,ck 등의 세부
-                        //리스트는 그대로라서 아무 변화가 없음 (변한게 덮어씌워짐)
-                        //합쳐서 하지 말고 걍 따로 띄우고 세부 삭제 시키는게 낫나?
+            println("<[0]홈 화면으로> <[1]포장/매장 여부 및 계산하기> <[2]주문표 조정하기>")
+            var lastOrder: Int = readLine()!!.toInt()
+            when (lastOrder) {
+                0 -> break
+                1 -> {
+                    var whereeat: Int = 0
+                    val nowTime = LocalTime.now()
+                    val nowYMDTime = LocalDateTime.now()
+                    val howShowTime = DateTimeFormatter.ofPattern("HH:mm")
+                    val realnowTime = nowTime.format(howShowTime)
+                    val howYMDShowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    val realnowYMDTime = nowYMDTime.format(howYMDShowTime)
+//                    왜 자꾸 나우, 오브패턴, 포맷에 밑줄이 뜨느냐?
+//                    임포트로 안드로이드에 쓰는 Api(O) Annotation을 추가하란 소리다.
+//                    하지만 이걸 앱으로 실행할 계획은 없으므로 무시해도 됨!
+
+                    println("<0.처음으로> <1.포장하기> <2.매장 내 식사>")
+                    whereeat = readLine()!!.toInt()
+                    when (whereeat) {
+                        0 -> {
+                            println("홈 화면으로 돌아갑니다 \n")
+                            break
+                        }
+
+                        1 -> {
+                            println("포장을 선택하셨습니다.")
+                            println("포장은 22시까지만 가능합니다.")
+                            if (nowTime.isBefore(LocalTime.of(22, 0))) {
+                                if (myMoney >= totalprice) {
+                                    myMoney = myMoney - totalprice
+                                    runBlocking {
+                                        launch {
+                                            println("\n결제 중입니다...")
+                                            delay(3000)
+                                            println("계산이 완료되었습니다. ${realnowYMDTime}")
+                                            println("남은 잔액은 ${myMoney}원 입니다.")
+                                        }
+                                    }
+                                    return "OrderComplete"
+                                }
+                                else {
+                                    println("잔액이 ${totalprice-myMoney}원 모자랍니다.")
+                                    break
+                                }
+                            } else {
+                                println("포장이 가능한 시간이 지났습니다. 주문에 어려움을 드려 죄송합니다.")
+                            }
+                        }
+
+                        2 -> {
+                            println("매장 내 식사를 선택하셨습니다.")
+                            println("식사는 21시까지만 가능합니다.")
+                            if (nowTime.isBefore(LocalTime.of(21, 0))) {
+                                if (myMoney >= totalprice) {
+                                    myMoney = myMoney - totalprice
+                                    runBlocking {
+                                        launch {
+                                            println("\n결제 중입니다...")
+                                            delay(3000)
+                                            println("계산이 완료되었습니다. ${realnowYMDTime}")
+                                            println("남은 잔액은 ${myMoney}원 입니다.")
+                                        }
+                                    }
+                                    return "OrderComplete"
+                                }
+                                else {
+                                    println("잔액이 ${totalprice-myMoney}원 모자랍니다.")
+                                    break
+                                }
+                            } else {
+                                println("매장 식사가 가능한 시간이 지났습니다. 주문에 어려움을 드려 죄송합니다.")
+                            }
+                        }
+
+                        else -> {
+                            println("숫자로 입력해주세요.")
+                            continue
+                        }
                     }
                 }
+                2 -> {
+                    while (true) {
+                        print("삭제할 카테고리를 정해주세요. <0.돌아가기> <1.버거> <2.치킨> <3.사이드> <4.음료> : ")
+                        var deleteMenu: Int = readLine()!!.toInt()
+                        when (deleteMenu) {
+                            0 -> {
+                                println("[5]주문 및 계산하기로 돌아갑니다.\n")
+                                break
+                            }
+
+                            1 -> {
+                                burgermn.bgorder.clear()
+                                println("버거 카테고리의 주문목록이 삭제되었습니다.\n")
+                                break
+                            }
+
+                            2 -> {
+                                chickenmn.ckorder.clear()
+                                println("치킨 카테고리의 주문목록이 삭제되었습니다.\n")
+                                break
+                            }
+
+                            3 -> {
+                                sidemn.sdorder.clear()
+                                println("사이드 카테고리의 주문목록이 삭제되었습니다.\n")
+                                break
+                            }
+
+                            4 -> {
+                                beveragemn.bvorder.clear()
+                                println("음료 카테고리의 주문목록이 삭제되었습니다.\n")
+                                break
+                            }
+
+                            else -> {
+                                println("0~4까지의 숫자만 입력할 수 있어요")
+                                continue
+                            }
+                        }
+                    }
+//                    else if (deleteMenu in 1 ..  totallist.size){
+//                        totallist.removeAt(deleteMenu-1)
+//                        println("${deleteMenu}번 메뉴가 삭제되었습니다.")
+                    //작동은 되는데 이 작동 이후 다시
+                    //최종주문표를 가져오는 과정에서 bg,ck 등의 세부
+                    //리스트는 그대로라서 아무 변화가 없음 (변한게 덮어씌워짐)
+                    //합쳐서 하지 말고 걍 따로 띄우고 세부 삭제 시키는게 낫나?
+                    //그냥 세부 메뉴 삭제 대신 메뉴 카테고리를 날려버리기로 했다.
+                    //자세히 파고들면 가능은 할 것 같은데 자신 없음
+//                    }
+                }
             }
-        }
-        catch (e: NumberFormatException)
-        {
+        } catch (e: NumberFormatException) {
             println("숫자로 입력해주세요")
         }
 
     }
-
+return "orderfail"
 }
 
 data class Orderlist(val name: String, val price: Int, val count: Int)
@@ -144,6 +252,5 @@ data class Orderlist(val name: String, val price: Int, val count: Int)
 //
 //        var deleteIndex: Int = readLine()!!.toInt()
 //
-//        // 사용자로부터 입력 받은 인덱스를 사용하여 주문 삭제 함수 호출
 //        burgermn.removeFromBgOrderList(deleteIndex - 1)
-// 이거는 주문 삭제 함수를 호출하는 경우. 다듬어보자
+// 이거는 주문 삭제 함수를 호출하는 경우. 필요시 사용해보자

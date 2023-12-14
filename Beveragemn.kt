@@ -3,6 +3,7 @@ package com.example.KIOSK
 class Beveragemn { //클래스는 대문자, 메인에서 클래스의 객체 생성할 때는 소문자
     var choicebv: Int = 0
     var bvcount: Int = 0
+    var bvtotal: Int = 0
     var bvorder = mutableListOf<Orderlist>()
     fun makeBvOrderList() {
 
@@ -43,7 +44,6 @@ class Beveragemn { //클래스는 대문자, 메인에서 클래스의 객체 �
                         }
                     }
 
-                    var bvtotal: Int = 0
                     for (i in bvorder) {
 
                         println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")

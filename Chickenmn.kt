@@ -5,6 +5,7 @@ class Chickenmn {
     var choiceck: Int = 0
     var singleorset: Int = 0
     var ckcount: Int = 0
+    var cktotal: Int = 0
     var ckorder = mutableListOf<Orderlist>()
 
     fun makeCkOrderList() {
@@ -85,7 +86,6 @@ class Chickenmn {
                             }
                         }
                     }
-                    var cktotal: Int = 0
                     for (i in ckorder) {
 
                         println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")

@@ -4,6 +4,7 @@ package com.example.KIOSK
 class Sidemn {
     var choicesd: Int = 0
     var sdcount: Int = 0
+    var sdtotal: Int = 0
     var sdorder = mutableListOf<Orderlist>()
     fun makeSdOrderList() {
 
@@ -48,7 +49,6 @@ class Sidemn {
                         }
                     }
 
-                    var sdtotal: Int = 0
                     for (i in sdorder) {
 
                         println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")

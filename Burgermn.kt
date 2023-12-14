@@ -5,6 +5,7 @@ class Burgermn { //클래스는 대문자, 메인에서 클래스의 객체 생�
     var choicebg: Int = 0
     var singleorset: Int = 0
     var bgcount: Int = 0
+    var bgtotal: Int = 0
     var bgorder = mutableListOf<Orderlist>()
     //makebgorderlist
     fun makeBgOrderList() {
@@ -82,7 +83,7 @@ class Burgermn { //클래스는 대문자, 메인에서 클래스의 객체 생�
                             }
                         }
                     }
-                    var bgtotal: Int = 0
+
                     for (i in bgorder) {
 
                         println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
