@@ -71,6 +71,10 @@ fun main() {
         println("숫자로 입력해주세요.")
     }
 
+//    아무래도 각 메뉴들은 클래스 파일로 빼뒀으면서
+//    정작 최종 주문은 메인 파일의 함수 밑에 따로 빼서 작성하다보니 서로의 함수 혹은
+//    함수에서 불러둔 클래스값을 가져오는게 상당히 힘들었다. 지금 이렇게 구분해둔 것이
+//    그닥 좋게는 여겨지지 않으니 이에 관한 피드백도 요청드려야 할 듯 하다
 }
 
 //@supressLint:"SuspiciousIndentation" 이런식으로 나온거 걍 줄이나 띄우기 구분
@@ -80,12 +84,10 @@ fun letOrder(
     sidemn: Sidemn, beveragemn: Beveragemn
 ):String {
 
-    var myMoney= 100000
-
-    //제공 방식을 먼저 물어보고 계산표 출력 및 계산하기
+    var myMoney= 150000
+    println("현재 내 보유금: ${myMoney}")
 
     while (true) {
-
 
         // 리스트들을 합칠 때 얘네들이 mutableListOf라고 해서
         // totallist도 변수 속성을 따라가는게 아님 (아마 Any같은걸로 지정될 듯)
@@ -185,7 +187,7 @@ fun letOrder(
                 }
                 2 -> {
                     while (true) {
-                        print("삭제할 카테고리를 정해주세요. <0.돌아가기> <1.버거> <2.치킨> <3.사이드> <4.음료> : ")
+                        println("삭제할 카테고리를 정해주세요. <0.돌아가기> <1.버거> <2.치킨> <3.사이드> <4.음료> ")
                         var deleteMenu: Int = readLine()!!.toInt()
                         when (deleteMenu) {
                             0 -> {

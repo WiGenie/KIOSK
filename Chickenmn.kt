@@ -10,7 +10,8 @@ class Chickenmn {
 
     fun makeCkOrderList() {
 //변수를 최초 선언하는 부분에서 변수에 마우스를 갖다 대고 Shift+F6을 누르면 리팩터를 통해 이후 사용된 모든
-//        같은 변수의 이름을 바꿀 수 있다!! 노가다 멈춰
+//같은 변수의 이름을 바꿀 수 있다!! 노가다 멈춰
+//Ctrl+Shift+R로 바꾸는게 안정성 면에서 더 낫다(다른 클래스 이름까지 바뀌면 안 되니까)
 
         val boneless = 1000
         val chickenlist = listOf(
@@ -53,7 +54,7 @@ class Chickenmn {
                                 }
 
                                 else -> {
-                                    println("${chickenlist[choiceck - 1].ckname} 뼈 ${chickenlist[choiceck - 1].ckprice} / ${ckcount}개가 주문 목록에 추가되었습니다.")
+                                    println("${chickenlist[choiceck - 1].ckname} 뼈 ${chickenlist[choiceck - 1].ckprice} / ${ckcount}개가 주문 목록에 추가되었습니다.\n")
                                     ckorder.add(
                                         Orderlist(
                                             "${chickenlist[choiceck - 1].ckname} 뼈",
@@ -74,7 +75,7 @@ class Chickenmn {
                                 }
 
                                 else -> {
-                                    println("${chickenlist[choiceck - 1].ckname} 순살 ${chickenlist[choiceck - 1].ckprice + boneless} / ${ckcount}개가 주문 목록에 추가되었습니다.")
+                                    println("${chickenlist[choiceck - 1].ckname} 순살 ${chickenlist[choiceck - 1].ckprice + boneless} / ${ckcount}개가 주문 목록에 추가되었습니다.\n")
                                     ckorder.add(
                                         Orderlist(
                                             "${chickenlist[choiceck - 1].ckname} 순살",
@@ -86,12 +87,12 @@ class Chickenmn {
                             }
                         }
                     }
-                    for (i in ckorder) {
-
-                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
-                        cktotal = cktotal + i.count * i.price
-                    }
-                    println("치킨 메뉴 총 가격: ${cktotal}\n")
+//                    for (i in ckorder) {
+//
+//                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
+//                        cktotal = cktotal + i.count * i.price
+//                    }
+//                    println("치킨 메뉴 총 가격: ${cktotal}\n")
 //                    총 가격 bgtotal을 추후 메인의 totalprice에 합산
 //                    bgorder 함수 또한 메인의 letorder에 합산.
 //                    근데 bgorderlist를 juiceorderlist같이 여러개 만들지 말고
