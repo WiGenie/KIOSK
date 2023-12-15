@@ -52,7 +52,7 @@ class Burgermn { //클래스는 대문자, 메인에서 클래스의 객체 생�
                             when (bgcount){
                                 0 -> continue
                                 else -> {
-                                    println("${burgerlist[choicebg - 1].bgname} 단품 ${burgerlist[choicebg - 1].bgprice} / ${bgcount}개가 주문 목록에 추가되었습니다.")
+                                    println("${burgerlist[choicebg - 1].bgname} 단품 ${burgerlist[choicebg - 1].bgprice} / ${bgcount}개가 주문 목록에 추가되었습니다. \n")
                                     bgorder.add(
                                         Orderlist(
                                             "${burgerlist[choicebg - 1].bgname} 단품",
@@ -71,7 +71,7 @@ class Burgermn { //클래스는 대문자, 메인에서 클래스의 객체 생�
                             when (bgcount) {
                                 0 -> continue
                                 else -> {
-                                    println("${burgerlist[choicebg - 1].bgname} 세트 ${burgerlist[choicebg - 1].bgprice + setmn} / ${bgcount}개가 주문 목록에 추가되었습니다.")
+                                    println("${burgerlist[choicebg - 1].bgname} 세트 ${burgerlist[choicebg - 1].bgprice + setmn} / ${bgcount}개가 주문 목록에 추가되었습니다.\n")
                                     bgorder.add(
                                         Orderlist(
                                             "${burgerlist[choicebg - 1].bgname} 세트",
@@ -84,14 +84,14 @@ class Burgermn { //클래스는 대문자, 메인에서 클래스의 객체 생�
                         }
                     }
 
-                    for (i in bgorder) {
+//                    for (i in bgorder) {
+//
+//                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
+//                        bgtotal = bgtotal + i.count * i.price
+//                    }
 
-                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
-                        bgtotal = bgtotal + i.count * i.price
-                    }
 
-
-                    println("버거 메뉴 총 가격: ${bgtotal}\n")
+//                    println("버거 메뉴 총 가격: ${bgtotal}\n")
 
 //                    총 가격 bgtotal을 추후 메인의 totalprice에 합산
 //                    bgorder 함수 또한 메인의 letorder에 합산.

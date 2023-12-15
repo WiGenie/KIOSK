@@ -10,9 +10,11 @@ class Sidemn {
 
 
         val sidelist = listOf(
-            Frenchfries("감자튀김", 1800),
+            Frenchfries("감자튀김", 2000),
             Conesalad("콘샐러드", 1800),
-            Cheeseball("치즈볼", 2600)
+            Cheeseball("치즈볼", 2100),
+            Coleslaw("코울슬로", 1800),
+            CheeseStick("치즈스틱", 2000)
         )
         while (true) {
             var linejumper = 0
@@ -42,21 +44,21 @@ class Sidemn {
                         }
 
                         else -> {
-                            println("${sidelist[choicesd - 1].sdname} ${sidelist[choicesd - 1].sdprice} / ${sdcount}개가 주문 목록에 추가되었습니다.")
+                            println("${sidelist[choicesd - 1].sdname} ${sidelist[choicesd - 1].sdprice} / ${sdcount}개가 주문 목록에 추가되었습니다.\n")
                             sdorder.add(Orderlist(sidelist[choicesd - 1].sdname, sidelist[choicesd - 1].sdprice, sdcount))
 
 
                         }
                     }
 
-                    for (i in sdorder) {
-
-                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
-                        sdtotal = sdtotal + i.count * i.price
-                    }
-
-
-                    println("사이드 메뉴 총 가격: ${sdtotal}\n")
+//                    for (i in sdorder) {
+//
+//                        println("${i.name}, ${i.count}개, 금액:${i.price * i.count}원")
+//                        sdtotal = sdtotal + i.count * i.price
+//                    }
+//
+//
+//                    println("사이드 메뉴 총 가격: ${sdtotal}\n")
                 }
             } catch (e: java.lang.NumberFormatException) {
                 println("숫자로 입력해주세요.")
@@ -74,3 +76,7 @@ class Frenchfries(sdname: String, sdprice: Int) : SIDE(sdname, sdprice)
 class Conesalad(sdname: String, sdprice: Int) : SIDE(sdname, sdprice)
 
 class Cheeseball(sdname: String, sdprice: Int) : SIDE(sdname, sdprice)
+
+class Coleslaw(sdname: String, sdprice: Int) : SIDE(sdname, sdprice)
+
+class CheeseStick(sdname: String, sdprice: Int) : SIDE(sdname, sdprice)
